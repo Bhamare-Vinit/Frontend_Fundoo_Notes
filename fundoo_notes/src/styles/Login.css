@@ -1,0 +1,199 @@
+.main-div{
+    border: 1px solid rgb(209, 209, 209);
+    width: 35%;
+    height: 470px;
+    margin: auto;
+    margin-top: 70px;
+    border-radius: 10px;
+    padding: 60px;
+    box-sizing: border-box;
+}
+
+.inner-div{
+    /* border: 1px solid black; */
+  width: 100%;
+  height: 350px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 5%;
+}
+.names-div{
+    /* border: 1px solid black; */
+  box-sizing: border-box;
+  height: 32%;
+}
+.google-div{
+    /* border: 1px solid black; */
+  width: 100%;
+  height: 37.5%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.google-span{
+    font-size: 35px;
+  font-weight: bold;
+}
+.login-div{
+    /* border: 1px solid black; */
+width: 100%;
+height: 37.5%;
+box-sizing: border-box;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: Arial, Helvetica, sans-serif;
+}
+.info-div{
+    /* border: 1px solid black; */
+width: 100%;
+height: 25%;
+box-sizing: border-box;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: Arial, Helvetica, sans-serif;
+}
+.name-input-div{
+    /* border: 1px solid black; */
+    box-sizing: border-box;
+    height: 12%;
+}
+.name-input{
+    border: 1px solid rgb(209, 209, 209);
+              width: 100%;
+              height: 100%;
+              box-sizing: border-box;
+              border-radius: 3px;
+              padding-left: 6px;
+}
+.password-input-div{
+    /* border: 1px solid black;  */
+    box-sizing: border-box;
+    height: 12%;
+}
+.password-input{
+    border: 1px solid rgb(209, 209, 209);
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 3px;
+    padding-left: 6px;
+}
+.forgot-div{
+    /* border: 1px solid black; */
+    box-sizing: border-box;
+    height: 12%;
+    align-content: center;
+}
+.forget-link{
+    text-decoration: none
+}
+.button-div{
+    /* border: 1px solid black; */
+    box-sizing: border-box;
+    height: 12%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.login-button{
+    width: 30%;
+    height: 100%;
+    background-color: rgb(5, 5, 120);
+    color: aliceblue;
+    cursor: pointer;
+    border-radius: 5px;
+}
+/* Tablet view */
+@media (max-width: 840px) {
+    .main-div {
+      width: 80%;
+      padding: 40px;
+      margin-top: 30px;
+    }
+  
+    .inner-div {
+      gap: 4%;
+    }
+  
+    .names-div {
+      
+      margin-bottom: 10px;
+    }
+  
+    .google-div {
+
+      font-size: 30px; /* Adjusted font size for better fit */
+    }
+  
+    .login-div,
+    .info-div {
+ 
+      font-size: 20px; /* Adjusted font size for better fit */
+    }
+  
+    .name-input-div,
+    .password-input-div,
+    .forget-div,
+    .button-div {
+      margin-bottom: 10px;
+    }
+  
+    .name-input,
+    .password-input {
+      padding-left: 8px; /* Increased padding for better touch targets */
+    }
+  
+    .login-button {
+      width: 40%;
+    }
+  }
+  
+  /* Mobile view */
+  @media (max-width: 480px) {
+    .main-div {
+      width: 95%;
+      padding: 20px;
+      margin-top: 10px;
+    }
+  
+    .inner-div {
+      flex-direction: column;
+      gap: 3%;
+    }
+  
+    .names-div,
+    .google-div,
+    .login-div,
+    .info-div {
+
+    }
+  
+    .name-input-div,
+    .password-input-div,
+    .forget-div,
+    .button-div {
+      margin-bottom: 10px;
+    }
+  
+    .name-input,
+    .password-input {
+      padding-left: 10px; /* Increased padding for better touch targets */
+    }
+  
+    .google-span {
+      font-size: 30px; /* Adjusted font size for better fit */
+    }
+  
+    .login-div span {
+      font-size: 20px; /* Adjusted font size for better fit */
+    }
+  
+    .login-button {
+      width: 40%;
+    }
+  }

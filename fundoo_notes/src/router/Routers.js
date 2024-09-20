@@ -7,7 +7,7 @@ export default function Routers() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/register" element={<Register/>}></Route>
+        <Route path="/register" element={<Register />}></Route>
         <Route path="/" element={<Login />}></Route>
       </Routes>
     </BrowserRouter>

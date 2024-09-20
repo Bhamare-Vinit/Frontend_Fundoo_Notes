@@ -1,4 +1,4 @@
-.main-div{
+.lmain-div{
     border: 1px solid rgb(209, 209, 209);
     width: 35%;
     height: 470px;
@@ -9,7 +9,7 @@
     box-sizing: border-box;
 }
 
-.inner-div{
+.linner-div{
     /* border: 1px solid black; */
   width: 100%;
   height: 350px;
@@ -18,12 +18,12 @@
   flex-direction: column;
   gap: 5%;
 }
-.names-div{
+.lnames-div{
     /* border: 1px solid black; */
   box-sizing: border-box;
   height: 32%;
 }
-.google-div{
+.lgoogle-div{
     /* border: 1px solid black; */
   width: 100%;
   height: 37.5%;
@@ -33,11 +33,11 @@
   justify-content: center;
   font-family: Arial, Helvetica, sans-serif;
 }
-.google-span{
+.lgoogle-span{
     font-size: 35px;
   font-weight: bold;
 }
-.login-div{
+.llogin-div{
     /* border: 1px solid black; */
 width: 100%;
 height: 37.5%;
@@ -47,7 +47,7 @@ align-items: center;
 justify-content: center;
 font-family: Arial, Helvetica, sans-serif;
 }
-.info-div{
+.linfo-div{
     /* border: 1px solid black; */
 width: 100%;
 height: 25%;
@@ -57,12 +57,12 @@ align-items: center;
 justify-content: center;
 font-family: Arial, Helvetica, sans-serif;
 }
-.name-input-div{
-    /* border: 1px solid black; */
+.lname-input-div{
+    /* border: 1px solid rgb(238, 22, 22); */
     box-sizing: border-box;
     height: 12%;
 }
-.name-input{
+.lname-input{
     border: 1px solid rgb(209, 209, 209);
               width: 100%;
               height: 100%;
@@ -70,29 +70,31 @@ font-family: Arial, Helvetica, sans-serif;
               border-radius: 3px;
               padding-left: 6px;
 }
-.password-input-div{
-    /* border: 1px solid black;  */
+.lpassword-input-div{
+    /* border: 1px solid rgb(251, 55, 55);  */
     box-sizing: border-box;
     height: 12%;
 }
-.password-input{
-    border: 1px solid rgb(209, 209, 209);
+
+.lpassword-input{
+    border: none;
     width: 100%;
-    height: 100%;
+    /* height: %; */
     box-sizing: border-box;
     border-radius: 3px;
     padding-left: 6px;
 }
-.forgot-div{
+
+.lforgot-div{
     /* border: 1px solid black; */
     box-sizing: border-box;
     height: 12%;
     align-content: center;
 }
-.forget-link{
+.lforget-link{
     text-decoration: none
 }
-.button-div{
+.lbutton-div{
     /* border: 1px solid black; */
     box-sizing: border-box;
     height: 12%;
@@ -100,7 +102,7 @@ font-family: Arial, Helvetica, sans-serif;
     align-items: center;
     justify-content: space-between;
 }
-.login-button{
+.llogin-button{
     width: 30%;
     height: 100%;
     background-color: rgb(5, 5, 120);
@@ -110,90 +112,91 @@ font-family: Arial, Helvetica, sans-serif;
 }
 /* Tablet view */
 @media (max-width: 840px) {
-    .main-div {
+    .lmain-div {
       width: 80%;
       padding: 40px;
       margin-top: 30px;
     }
   
-    .inner-div {
+    .linner-div {
       gap: 4%;
     }
   
-    .names-div {
+    .lnames-div {
       
       margin-bottom: 10px;
     }
   
-    .google-div {
+    .lgoogle-div {
 
       font-size: 30px; /* Adjusted font size for better fit */
     }
   
-    .login-div,
-    .info-div {
+    .llogin-div,
+    .linfo-div {
  
       font-size: 20px; /* Adjusted font size for better fit */
     }
   
-    .name-input-div,
-    .password-input-div,
-    .forget-div,
-    .button-div {
+    .lname-input-div,
+    .lpassword-input-div,
+    .lforget-div,
+    .lbutton-div {
       margin-bottom: 10px;
     }
   
-    .name-input,
-    .password-input {
+    .lname-input,
+    .lpassword-input {
+      
       padding-left: 8px; /* Increased padding for better touch targets */
     }
   
-    .login-button {
+    .llogin-button {
       width: 40%;
     }
   }
   
   /* Mobile view */
   @media (max-width: 480px) {
-    .main-div {
+    .lmain-div {
       width: 95%;
       padding: 20px;
       margin-top: 10px;
     }
   
-    .inner-div {
+    .linner-div {
       flex-direction: column;
       gap: 3%;
     }
   
-    .names-div,
-    .google-div,
-    .login-div,
-    .info-div {
+    .lnames-div,
+    .lgoogle-div,
+    .llogin-div,
+    .linfo-div {
 
     }
   
-    .name-input-div,
-    .password-input-div,
-    .forget-div,
-    .button-div {
+    .lname-input-div,
+    .lpassword-input-div,
+    .lforget-div,
+    .lbutton-div {
       margin-bottom: 10px;
     }
   
-    .name-input,
-    .password-input {
+    .lname-input,
+    .lpassword-input {
       padding-left: 10px; /* Increased padding for better touch targets */
     }
   
-    .google-span {
+    .lgoogle-span {
       font-size: 30px; /* Adjusted font size for better fit */
     }
   
-    .login-div span {
+    .llogin-div span {
       font-size: 20px; /* Adjusted font size for better fit */
     }
   
-    .login-button {
+    .llogin-button {
       width: 40%;
     }
   }

@@ -1,15 +1,19 @@
 import React from "react";
-import { BrowserRouter, Route, Switch, Routes } from "react-router-dom";
+import { BrowserRouter , Routes, Route } from "react-router-dom";
+import Login from "../pages/Login"
 import Register from "../pages/Register";
-import Login from "../pages/Register";
+import Home from "../pages/Home";
 
 export default function Routers() {
   return (
-    <BrowserRouter>
+    <>
       <Routes>
-        <Route path="/register" element={<Register />}></Route>
-        <Route path="/" element={<Login />}></Route>
+        {/* <Route path="/register" element={<Register />}></Route>
+        <Route path="/" element={<Login />}></Route> */}
+        <Route path="/register" element={<Register/>}></Route>
+        <Route path="/" element={<Login/>}></Route>
+        <Route path="/home" element={<Home/>}></Route>
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }

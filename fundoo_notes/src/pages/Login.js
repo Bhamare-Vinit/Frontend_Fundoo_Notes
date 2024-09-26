@@ -153,6 +153,7 @@ import { useState } from "react";
 // export default Login;
 
 import React from "react";
+import { signIn } from "../services/userServices";
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -165,9 +166,27 @@ const Login = () => {
     const newObj = { ...values, [e.target.name]: e.target.value };
     setValues(newObj);
   }
-  function handleValidation(e) {
+  async function handleValidation(e) {
     e.preventDefault();
     setErrors(Validation(values));
+
+    if (Object.keys(errors).length === 0) {
+      console.log("Initail data: ", values);
+      try {
+        let response = await signIn(values);
+        // console.log("response:", response);
+        // console.log("response_data:", response.data);
+        // console.log("accesss1:", response.data.data.access);
+
+        // // console.log(response.data);
+        // console.log("access2:", JSON.stringify(response.data.access));
+        localStorage.setItem("access", response.data.data.access);
+        console.log("access Token", response.data.data.access);
+      } catch (err) {
+        // toast.error("User already exists");
+        console.log("error: ", err);
+      }
+    }
   }
 
   function Validation(values) {
@@ -190,110 +209,112 @@ const Login = () => {
     return errors;
   }
   return (
-    <div className="lmain-div">
-      <form
-        onSubmit={handleValidation}
-        style={{ width: "100%", height: "100%" }}
-      >
-        <div className="linner-div">
-          <div className="lnames-div">
-            <div className="lgoogle-div">
-              <span
-                className="lgoogle-span"
-                style={{ color: "rgb(4, 4, 125)" }}
-              >
-                G
-              </span>
-              <span
-                className="lgoogle-span"
-                style={{ color: "rgb(208, 3, 3)" }}
-              >
-                o
-              </span>
-              <span
-                className="lgoogle-span"
-                style={{ color: "rgb(222, 218, 4)" }}
-              >
-                o
-              </span>
-              <span
-                className="lgoogle-span"
-                style={{ color: "rgb(4, 4, 125)" }}
-              >
-                g
-              </span>
-              <span
-                className="lgoogle-span"
-                style={{ color: "rgba(17, 206, 4, 0.749)" }}
-              >
-                l
-              </span>
-              <span
-                className="lgoogle-span"
-                style={{ color: "rgb(208, 3, 3)" }}
-              >
-                e
-              </span>
+    <>
+      <div className="lmain-div">
+        <form
+          onSubmit={handleValidation}
+          style={{ width: "100%", height: "100%" }}
+        >
+          <div className="linner-div">
+            <div className="lnames-div">
+              <div className="lgoogle-div">
+                <span
+                  className="lgoogle-span"
+                  style={{ color: "rgb(4, 4, 125)" }}
+                >
+                  G
+                </span>
+                <span
+                  className="lgoogle-span"
+                  style={{ color: "rgb(208, 3, 3)" }}
+                >
+                  o
+                </span>
+                <span
+                  className="lgoogle-span"
+                  style={{ color: "rgb(222, 218, 4)" }}
+                >
+                  o
+                </span>
+                <span
+                  className="lgoogle-span"
+                  style={{ color: "rgb(4, 4, 125)" }}
+                >
+                  g
+                </span>
+                <span
+                  className="lgoogle-span"
+                  style={{ color: "rgba(17, 206, 4, 0.749)" }}
+                >
+                  l
+                </span>
+                <span
+                  className="lgoogle-span"
+                  style={{ color: "rgb(208, 3, 3)" }}
+                >
+                  e
+                </span>
+              </div>
+              <div className="llogin-div">
+                <span style={{ fontsize: "22px" }}>Login</span>
+              </div>
+              <div className="linfo-div">
+                <span>Use your Google Account</span>
+              </div>
             </div>
-            <div className="llogin-div">
-              <span style={{ fontsize: "22px" }}>Login</span>
-            </div>
-            <div className="linfo-div">
-              <span>Use your Google Account</span>
-            </div>
-          </div>
-          <div className="lname-input-div">
-            <TextField
-              className="lname-input"
-              name="email"
-              id="outlined-basic"
-              label="Email or Phone"
-              variant="outlined"
-              size="small"
-              onChange={handleInput}
-              error={!!errors.email}
-              helperText={errors.email}
-            />
-            {/* <input
+            <div className="lname-input-div">
+              <TextField
+                className="lname-input"
+                name="email"
+                id="outlined-basic"
+                label="Email or Phone"
+                variant="outlined"
+                size="small"
+                onChange={handleInput}
+                error={!!errors.email}
+                helperText={errors.email}
+              />
+              {/* <input
               className="lname-input"
               type="text"
               placeholder="Email or Phone*"
             /> */}
-          </div>
-          <div className="lpassword-input-div">
-            <TextField
-              className="lpassword-input"
-              name="password"
-              id="outlined-basic"
-              label="Password"
-              variant="outlined"
-              size="small"
-              onChange={handleInput}
-              error={!!errors.password}
-              helperText={errors.password}
-            />
-            {/* <input
+            </div>
+            <div className="lpassword-input-div">
+              <TextField
+                className="lpassword-input"
+                name="password"
+                id="outlined-basic"
+                label="Password"
+                variant="outlined"
+                size="small"
+                onChange={handleInput}
+                error={!!errors.password}
+                helperText={errors.password}
+              />
+              {/* <input
               className="lpassword-input"
               type="text"
               placeholder="Password*"
             /> */}
+            </div>
+            <div className="lforgot-div">
+              <a className="lforget-link" href="">
+                forgot Password?
+              </a>
+            </div>
+            <div className="lbutton-div">
+              <a href="" className="forget-link">
+                Create account
+              </a>
+              <button className="llogin-button" type="submit">
+                Login
+              </button>
+            </div>
           </div>
-          <div className="lforgot-div">
-            <a className="lforget-link" href="">
-              forgot Password?
-            </a>
-          </div>
-          <div className="lbutton-div">
-            <a href="" className="forget-link">
-              Create account
-            </a>
-            <button className="llogin-button" type="submit">
-              Login
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   );
 };
 

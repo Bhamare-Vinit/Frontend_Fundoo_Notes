@@ -1,7 +1,6 @@
-// ArchivedNotes.js
 import React, { useEffect, useState } from "react";
-import Note from "./Note"; // Import your Note component
-import { getArchivedNote } from "../services/userServices"; // Import the API service
+import Note from "./Note";
+import { getArchivedNote } from "../services/userServices";
 import { Grid, Typography } from "@mui/material";
 import { useOutletContext } from "react-router-dom";
 
@@ -13,7 +12,7 @@ const Archived = () => {
     const fetchArchivedNotes = async () => {
       try {
         const response = await getArchivedNote();
-        console.log("Archived Notes Response:", response.data); // Debugging log
+        console.log("Archived Notes Response:", response.data);
         setArchivedNotes(response.data.data);
       } catch (error) {
         console.error("Error fetching archived notes:", error);

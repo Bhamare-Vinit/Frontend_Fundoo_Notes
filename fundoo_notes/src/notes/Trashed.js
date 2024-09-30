@@ -1,7 +1,6 @@
-// TrashedNotes.js
 import React, { useEffect, useState } from "react";
-import Note from "./Note"; // Import your Note component
-import { getTrashNote } from "../services/userServices"; // Import the API service
+import Note from "./Note";
+import { getTrashNote } from "../services/userServices";
 import { Grid, Typography } from "@mui/material";
 import { useOutletContext } from "react-router-dom";
 
@@ -13,7 +12,7 @@ const Trashed = () => {
     const fetchTrashedNotes = async () => {
       try {
         const response = await getTrashNote();
-        console.log("Trashed Notes Response:", response.data.data); // Debugging log
+        console.log("Trashed Notes Response:", response.data.data);
         setTrashedNotes(response.data.data);
       } catch (error) {
         console.error("Error fetching trashed notes:", error);

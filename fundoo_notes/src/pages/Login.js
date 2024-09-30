@@ -1,7 +1,7 @@
 // import React, { Component } from "react";
 import "../styles/Login.css";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // class Login extends Component {
 //   //start
@@ -155,6 +155,8 @@ import { useState } from "react";
 import React from "react";
 import { signIn } from "../services/userServices";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -162,6 +164,9 @@ const Login = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   function handleInput(e) {
     const newObj = { ...values, [e.target.name]: e.target.value };
@@ -175,6 +180,8 @@ const Login = () => {
       console.log("Initail data: ", values);
       try {
         let response = await signIn(values);
+
+        console.log("login success", "++++++++++");
         // console.log("response:", response);
         // console.log("response_data:", response.data);
         // console.log("accesss1:", response.data.data.access);
@@ -182,8 +189,26 @@ const Login = () => {
         // // console.log(response.data);
         // console.log("access2:", JSON.stringify(response.data.access));
         localStorage.setItem("access", response.data.data.access);
+
+        console.log(showSuccessAlert);
+        if (response) {
+          setShowSuccessAlert(true);
+        }
+        setTimeout(() => {
+          setShowSuccessAlert(false);
+          navigate("/home");
+        }, 3000);
+
+        navigate("/home");
         console.log("access Token", response.data.data.access);
       } catch (err) {
+        //just try
+        setShowErrorAlert(true);
+
+        setTimeout(() => {
+          setShowErrorAlert(false);
+        }, 5000);
+
         // toast.error("User already exists");
         console.log("error: ", err);
       }
@@ -212,6 +237,24 @@ const Login = () => {
   return (
     <>
       <div className="lmain-div">
+        {showSuccessAlert && (
+          <Alert
+            variant="filled"
+            severity="success"
+            style={{ position: "fixed", top: 20, right: 20, zIndex: 1000 }}
+          >
+            Login successful! Redirecting...
+          </Alert>
+        )}
+        {showErrorAlert && (
+          <Alert
+            variant="filled"
+            severity="error"
+            style={{ position: "fixed", top: 20, right: 20, zIndex: 1000 }}
+          >
+            Login failed! Please check your credentials.
+          </Alert>
+        )}
         <form
           onSubmit={handleValidation}
           style={{ width: "100%", height: "100%" }}

@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import Note from "./Note"; // Import your Note component
-import { getNote } from "../services/userServices"; // Import the API service
+import Note from "./Note";
+import { getNote } from "../services/userServices";
 import { Grid, Typography } from "@mui/material";
 import { useOutletContext } from "react-router-dom";
 

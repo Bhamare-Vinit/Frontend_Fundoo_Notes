@@ -9,7 +9,7 @@ import { Outlet } from "react-router-dom";
 const Home = () => {
   const [selectedTab, setSelectedTab] = useState("Notes");
   const [layoutType, setLayoutType] = useState("grid");
-  const [searchQuery, setSearchQuery] = useState(""); // Add searchQuery state
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <Box style={{ display: "flex", width: "100%" }}>
@@ -18,8 +18,8 @@ const Home = () => {
         setSelectedTab={setSelectedTab}
         layoutType={layoutType}
         setLayoutType={setLayoutType}
-        searchQuery={searchQuery} // Pass searchQuery state to SwipeDrawer
-        setSearchQuery={setSearchQuery} // Pass setSearchQuery to allow updates
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
       <Notes
         selectedTab={selectedTab}

@@ -35,7 +35,7 @@ const Container = styled(Box)`
 
 const Form = ({ noteData, setNoteData, handleNewNote }) => {
   const [showTextField, setShowTextField] = useState(false);
-  const [colorPickerOpen, setColorPickerOpen] = useState(null); // For pop-up control
+  const [colorPickerOpen, setColorPickerOpen] = useState(null);
   const containerRef = useRef();
 
   const onTextAreaClick = () => {
@@ -67,7 +67,6 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
         );
 
         handleNewNote(response.data.data);
-        // Clear inputs after successful creation
         setNoteData({ title: "", description: "", color: "" });
       } catch (error) {
         console.error("Error creating note:", error);
@@ -87,7 +86,7 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNoteData((prev) => ({ ...prev, [name]: value })); // Update state object
+    setNoteData((prev) => ({ ...prev, [name]: value }));
   };
   // start
   const handleColorClick = (event) => {
@@ -118,7 +117,7 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
             variant="standard"
             InputProps={{ disableUnderline: true }}
             style={{ marginBottom: "10px" }}
-            value={noteData.title} // Use state value
+            value={noteData.title} 
             onChange={handleChange}
           />
         )}
@@ -130,7 +129,7 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
           variant="standard"
           InputProps={{ disableUnderline: true }}
           onClick={onTextAreaClick}
-          value={noteData.description} // Use state value
+          value={noteData.description} 
           onChange={handleChange}
         />
         {showTextField && (
@@ -177,7 +176,6 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
         )}
 
         {/* start */}
-        {/* Popover for color picker */}
         <Popover
           id={id}
           open={open}
@@ -189,7 +187,6 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
           }}
         >
           <Box sx={{ display: "flex", p: 2 }}>
-            {/* List of color options */}
             {[
               "#f28b82",
               "#fbbc04",

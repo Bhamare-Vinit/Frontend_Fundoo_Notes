@@ -77,7 +77,6 @@ const Note = ({ noteData, layoutType, onNoteUpdate }) => {
     reminder: noteData.reminder,
   });
 
-  //open modal and give initial values
   const handleOpenModal = () => {
     setEditedNoteData({
       title: noteData.title,
@@ -94,13 +93,10 @@ const Note = ({ noteData, layoutType, onNoteUpdate }) => {
   //close modal
   const handleCloseModal = async () => {
     setOpenModal(false);
-
-    // Update the note on server
     try {
-      await updateNote(noteData.id, editedNoteData); // Call the API to update the note with its ID
+      await updateNote(noteData.id, editedNoteData);
       console.log("Note updated successfully");
 
-      // Optionally trigger a callback to update the note in the parent component
       if (onNoteUpdate) {
         onNoteUpdate(noteData.id, editedNoteData);
       }
@@ -108,21 +104,15 @@ const Note = ({ noteData, layoutType, onNoteUpdate }) => {
       console.error("Failed to update note", error);
     }
   };
-
-  //handle input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedNoteData((prev) => ({ ...prev, [name]: value }));
   };
-  //color logic
-
-  //
   const handleColorClick = (event) => {
     setColorPickerOpen(event.currentTarget);
     console.log("I clicked on color handleColorClick run");
   };
 
-  //close color picker in modal
   const handleColorClose = () => {
     setColorPickerOpen(null);
   };
@@ -160,28 +150,21 @@ const Note = ({ noteData, layoutType, onNoteUpdate }) => {
   // };
   //start
   const handleColors = (color) => {
-    // Update the state with the selected color
     setEditedNoteData((prev) => ({ ...prev, color }));
-
-    // Close the color picker
     setColorPickerOpen(null);
   };
 
-  // Use useEffect to trigger the API call when the color changes
   useEffect(() => {
     if (editedNoteData.color) {
-      handleColorUpdates(); // Trigger the API call whenever color changes
+      handleColorUpdates();
     }
   }, [editedNoteData.color]);
 
-  // Function to handle the API call and update the database
   const handleColorUpdates = async () => {
     try {
-      // Call the API to update the note in the database
       await updateNote(noteData.id, editedNoteData);
       console.log("Note color updated successfully");
 
-      // Optionally, you can trigger the callback to update the parent component
       if (onNoteUpdate) {
         onNoteUpdate(noteData.id, editedNoteData);
       }
@@ -305,7 +288,6 @@ const Note = ({ noteData, layoutType, onNoteUpdate }) => {
           </Box>
         </Container>
       </Modal>
-      {/* Popover for color picker */}
       <Popover
         id={id}
         open={open}
@@ -332,9 +314,9 @@ const Note = ({ noteData, layoutType, onNoteUpdate }) => {
               key={index}
               onClick={() => {
                 if (openModal) {
-                  handleColorSelect(color); // If modal is open, call handleColorSelect
+                  handleColorSelect(color);
                 } else {
-                  handleColors(color); // Otherwise, call handleColors
+                  handleColors(color);
                 }
               }}
             >

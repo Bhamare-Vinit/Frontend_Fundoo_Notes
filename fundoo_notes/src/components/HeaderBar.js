@@ -36,12 +36,11 @@ const HeaderBar = ({
   setSearchQuery,
 }) => {
   const toggleLayout = () => {
-    // Toggle between "grid" and "list"
     setLayoutType((prevType) => (prevType === "grid" ? "list" : "grid"));
   };
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value); // Update searchQuery state on input change
+    setSearchQuery(e.target.value);
   };
 
   const logo =
@@ -82,8 +81,8 @@ const HeaderBar = ({
             label="Search field"
             type="search"
             variant="filled"
-            value={searchQuery} // Bind to searchQuery state
-            onChange={handleSearchChange} // Update on input change
+            value={searchQuery}
+            onChange={handleSearchChange}
             InputProps={{ disableUnderline: true }}
           />
         </Box>

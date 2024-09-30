@@ -50,7 +50,7 @@ const NavList = ({ open, selectedTab, setSelectedTab }) => {
                   },
 
               selectedTab === list.name && {
-                backgroundColor: "#f0f0f0", // Highlight selected tab
+                backgroundColor: "#f0f0f0",
               },
             ]}
           >

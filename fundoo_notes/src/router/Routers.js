@@ -37,23 +37,22 @@ const AppRoutes = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <Home />, // Home contains SwipeDrawer and Notes
+    element: <Home />,
     children: [
       {
-        path: "", // This will render AllNotes by default
+        path: "",
         element: <AllNotes />,
       },
       {
         path: "archive",
-        element: <Archived />, // Render Archived component
+        element: <Archived />,
       },
       {
         path: "trash",
-        element: <Trashed />, // Render Trashed component
+        element: <Trashed />,
       },
     ],
   },
-  // Add any other routes you may need
 ]);
 
 const RoutingModule = () => {

@@ -186,7 +186,7 @@ const Register = () => {
     setErrors(Validation(values));
 
     if (Object.keys(errors).length === 0) {
-      console.log("Initail data: ", values); // Log user data
+      console.log("Initail data: ", values); 
       try {
         let response = await signUp(values);
         console.log(response.data);
@@ -195,8 +195,8 @@ const Register = () => {
         console.log("error: ", err);
       }
 
-      // console.log(values); // Log user data
-      setSuccess("User registered successfully!"); // Show success message
+      // console.log(values); 
+      setSuccess("User registered successfully!"); 
     }
   }
   function Validation(values) {

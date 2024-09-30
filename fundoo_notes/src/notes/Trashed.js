@@ -6,14 +6,22 @@ import { useOutletContext } from "react-router-dom";
 
 const Trashed = () => {
   const [trashedNotes, setTrashedNotes] = useState([]);
-  const { layoutType, searchQuery, handleNoteUpdate } = useOutletContext();
+  const {
+    allNotes,
+    setAllNotes,
+    selectedTab,
+    layoutType,
+    searchQuery,
+    handleNoteUpdate,
+    handleNoteRemove,
+  } = useOutletContext();
 
   useEffect(() => {
     const fetchTrashedNotes = async () => {
       try {
         const response = await getTrashNote();
         console.log("Trashed Notes Response:", response.data.data);
-        setTrashedNotes(response.data.data);
+        setAllNotes(response.data.data);
       } catch (error) {
         console.error("Error fetching trashed notes:", error);
       }
@@ -25,7 +33,7 @@ const Trashed = () => {
   //     // (note) =>
   //     //   note.title && note.title.toLowerCase().includes(searchQuery.toLowerCase())
   //   );
-  const filteredNotes = trashedNotes.filter(
+  const filteredNotes = allNotes.filter(
     (note) =>
       note.title && note.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -40,9 +48,11 @@ const Trashed = () => {
         filteredNotes.map((note, index) => (
           <Grid item key={index} xs={layoutType === "grid" ? 3 : 12}>
             <Note
+              selectedTab={selectedTab}
               noteData={note}
               layoutType={layoutType}
               onNoteUpdate={handleNoteUpdate}
+              handleNoteRemove={handleNoteRemove}
             />
           </Grid>
         ))

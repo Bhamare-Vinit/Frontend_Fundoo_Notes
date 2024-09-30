@@ -21,7 +21,15 @@ import { IconButton } from "@mui/material";
 import AddAlertOutlined from "@mui/icons-material/AddAlertOutlined";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import AddAlertOutlinedIcon from "@mui/icons-material/AddAlertOutlined";
-import { updateNote } from "../services/userServices";
+import DeleteForever from "@mui/icons-material/DeleteForever";
+import {
+  updateNote,
+  toggleArchive,
+  toggleTrash,
+} from "../services/userServices";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import RestoreFromTrash from "@mui/icons-material/RestoreFromTrash";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -61,12 +69,18 @@ const Container = styled(Box)`
       transform: 'translate(-50%, -50%)', 
 `;
 
-const Note = ({ noteData, layoutType, onNoteUpdate }) => {
+const Note = ({
+  selectedTab,
+  noteData,
+  layoutType,
+  onNoteUpdate,
+  handleNoteRemove,
+}) => {
+  console.log("TTTTTTTAg:", selectedTab);
   const containerRef = useRef();
   const [isHovered, setIsHovered] = useState(false);
   // start
   const [openModal, setOpenModal] = useState(false);
-
   const [colorPickerOpen, setColorPickerOpen] = useState(null);
   const [editedNoteData, setEditedNoteData] = useState({
     title: noteData.title,
@@ -76,6 +90,36 @@ const Note = ({ noteData, layoutType, onNoteUpdate }) => {
     is_trash: noteData.is_trash,
     reminder: noteData.reminder,
   });
+  // start
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClickMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDeleteNote = async () => {
+    setAnchorEl(null);
+    setOpenModal(false);
+    try {
+      await toggleTrash(noteData.id); // Call API to toggle archive status
+      // setEditedNoteData((prev) => ({
+      //   ...prev,
+      //   is_archive: !prev.is_archive, // Update local state for archive status
+      // }));
+
+      if (handleNoteRemove) {
+        handleNoteRemove(noteData.id); // Pass the ID of the note to be removed
+      }
+      console.log("Note Trash status toggled");
+    } catch (error) {
+      console.error("Failed to toggle Trash status", error);
+    }
+  };
+
+  // end
 
   const handleOpenModal = () => {
     setEditedNoteData({
@@ -148,6 +192,23 @@ const Note = ({ noteData, layoutType, onNoteUpdate }) => {
 
   //   setColorPickerOpen(null);
   // };
+  const handleArchiveToggle = async () => {
+    setOpenModal(false);
+    try {
+      await toggleArchive(noteData.id); // Call API to toggle archive status
+      // setEditedNoteData((prev) => ({
+      //   ...prev,
+      //   is_archive: !prev.is_archive, // Update local state for archive status
+      // }));
+
+      if (handleNoteRemove) {
+        handleNoteRemove(noteData.id); // Pass the ID of the note to be removed
+      }
+      console.log("Note archive status toggled");
+    } catch (error) {
+      console.error("Failed to toggle archive status", error);
+    }
+  };
   //start
   const handleColors = (color) => {
     setEditedNoteData((prev) => ({ ...prev, color }));
@@ -199,7 +260,7 @@ const Note = ({ noteData, layoutType, onNoteUpdate }) => {
             }}
           >
             {/* <CardActions> */}
-            <IconButton size="small">
+            {/* <IconButton size="small">
               <AddAlertOutlined fontSize="small" />
             </IconButton>
             <IconButton size="small">
@@ -211,15 +272,87 @@ const Note = ({ noteData, layoutType, onNoteUpdate }) => {
             <IconButton size="small">
               <InsertPhotoOutlinedIcon fontSize="small" />
             </IconButton>
-            <IconButton size="small">
+            <IconButton size="small" onClick={handleArchiveToggle}>
               <ArchiveOutlinedIcon fontSize="small" />
             </IconButton>
-            <IconButton size="small">
+            <IconButton
+              size="small"
+              aria-controls={open ? "demo-positioned-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClickMenu}
+            >
               <MoreVertOutlinedIcon fontSize="small" />
-            </IconButton>
+            </IconButton> */}
             {/* </CardActions> */}
+            {selectedTab ? (
+              // If selectedTag is defined, show only the first two IconButtons
+              <Box
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  gap: "50%",
+                }}
+              >
+                <IconButton size="small">
+                  <DeleteForever fontSize="small" />
+                </IconButton>
+                <IconButton size="small">
+                  <RestoreFromTrash
+                    fontSize="small"
+                    onClick={handleDeleteNote}
+                  />
+                </IconButton>
+              </Box>
+            ) : (
+              // If selectedTag is not defined, show all IconButtons
+              <>
+                <IconButton size="small">
+                  <AddAlertOutlined fontSize="small" />
+                </IconButton>
+                <IconButton size="small">
+                  <PersonAddAltOutlinedIcon fontSize="small" />
+                </IconButton>
+                <IconButton size="small" onClick={handleColorClick}>
+                  <ColorLensOutlinedIcon fontSize="small" />
+                </IconButton>
+                <IconButton size="small">
+                  <InsertPhotoOutlinedIcon fontSize="small" />
+                </IconButton>
+                <IconButton size="small" onClick={handleArchiveToggle}>
+                  <ArchiveOutlinedIcon fontSize="small" />
+                </IconButton>
+                <IconButton
+                  size="small"
+                  aria-controls={open ? "demo-positioned-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={handleClickMenu}
+                >
+                  <MoreVertOutlinedIcon fontSize="small" />
+                </IconButton>
+              </>
+            )}
           </Box>
         )}
+        <Menu
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
+          anchorEl={anchorEl}
+          open={openMenu}
+          onClose={handleCloseMenu}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          <MenuItem onClick={handleDeleteNote}>Delete note</MenuItem>
+          <MenuItem onClick={handleCloseMenu}>Add Labels</MenuItem>
+        </Menu>
       </StyledCard>
       {/* // Model start */}
       <Modal open={openModal} onClose={handleCloseModal}>
@@ -266,14 +399,17 @@ const Note = ({ noteData, layoutType, onNoteUpdate }) => {
               <IconButton>
                 <InsertPhotoOutlinedIcon />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={handleArchiveToggle}>
                 <ArchiveOutlinedIcon />
               </IconButton>
-              <IconButton>
-                <UndoOutlinedIcon />
-              </IconButton>
-              <IconButton>
-                <RedoOutlinedIcon />
+              <IconButton
+                size="small"
+                aria-controls={open ? "demo-positioned-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                onClick={handleClickMenu}
+              >
+                <MoreVertOutlinedIcon fontSize="small" />
               </IconButton>
             </Box>
             <Box>

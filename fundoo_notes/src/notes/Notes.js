@@ -74,6 +74,9 @@ const Notes = ({ selectedTab, layoutType, searchQuery }) => {
       )
     );
   };
+  const handleNoteRemove = (noteId) => {
+    setAllNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
+  };
 
   const DrawerHeader = styled("div")(({ theme }) => ({
     ...theme.mixins.toolbar,
@@ -128,7 +131,15 @@ const Notes = ({ selectedTab, layoutType, searchQuery }) => {
         />
         <DrawerHeader />
         <Outlet
-          context={{ layoutType, searchQuery, allNotes,setAllNotes, handleNoteUpdate }}
+          context={{
+            selectedTab,
+            layoutType,
+            searchQuery,
+            allNotes,
+            setAllNotes,
+            handleNoteUpdate,
+            handleNoteRemove,
+          }}
         />
         {/* <Box
           sx={{

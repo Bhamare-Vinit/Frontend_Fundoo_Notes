@@ -7,8 +7,15 @@ import { useOutletContext } from "react-router-dom";
 
 const AllNotes = () => {
   // const [allNotes, setAllNotes] = useState([]);
-  const { layoutType, searchQuery, handleNoteUpdate, allNotes, setAllNotes } =
-    useOutletContext();
+  const {
+    selectedTab,
+    layoutType,
+    searchQuery,
+    handleNoteUpdate,
+    allNotes,
+    setAllNotes,
+    handleNoteRemove,
+  } = useOutletContext();
 
   useEffect(() => {
     const fetchAllNotes = async () => {
@@ -46,6 +53,7 @@ const AllNotes = () => {
               noteData={note}
               layoutType={layoutType}
               onNoteUpdate={handleNoteUpdate}
+              handleNoteRemove={handleNoteRemove}
             />
           </Grid>
         ))

@@ -10,6 +10,7 @@ const Home = () => {
   const [selectedTab, setSelectedTab] = useState("Notes");
   const [layoutType, setLayoutType] = useState("grid");
   const [searchQuery, setSearchQuery] = useState("");
+  console.log("Selected Tag is:", selectedTab);
 
   return (
     <Box style={{ display: "flex", width: "100%" }}>

@@ -82,3 +82,47 @@ export const updateNote = async (noteId, data) => {
     throw error;
   }
 };
+
+export const toggleArchive = async (noteId) => {
+  const token = localStorage.getItem("access");
+
+  try {
+    console.log("inner function Start");
+    let response = await axios.patch(
+      `${noteUrl}notes/${noteId}/toggle_archive/`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("Still running");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const toggleTrash = async (noteId) => {
+  const token = localStorage.getItem("access");
+
+  try {
+    console.log("inner function Start");
+    let response = await axios.patch(
+      `${noteUrl}notes/${noteId}/toggle_trash/`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("Still running");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+

@@ -6,14 +6,22 @@ import { useOutletContext } from "react-router-dom";
 
 const Archived = () => {
   const [archivedNotes, setArchivedNotes] = useState([]);
-  const { layoutType, searchQuery, handleNoteUpdate } = useOutletContext();
+  const {
+    selectedTab,
+    layoutType,
+    searchQuery,
+    handleNoteUpdate,
+    allNotes,
+    setAllNotes,
+    handleNoteRemove,
+  } = useOutletContext();
 
   useEffect(() => {
     const fetchArchivedNotes = async () => {
       try {
         const response = await getArchivedNote();
         console.log("Archived Notes Response:", response.data);
-        setArchivedNotes(response.data.data);
+        setAllNotes(response.data.data);
       } catch (error) {
         console.error("Error fetching archived notes:", error);
       }
@@ -27,7 +35,7 @@ const Archived = () => {
   //   // (note) =>
   //   //   note.title && note.title.toLowerCase().includes(searchQuery.toLowerCase())
   //   ();
-  const filteredNotes = archivedNotes.filter(
+  const filteredNotes = allNotes.filter(
     (note) =>
       note.title && note.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -45,6 +53,7 @@ const Archived = () => {
               noteData={note}
               layoutType={layoutType}
               onNoteUpdate={handleNoteUpdate}
+              handleNoteRemove={handleNoteRemove}
             />
           </Grid>
         ))

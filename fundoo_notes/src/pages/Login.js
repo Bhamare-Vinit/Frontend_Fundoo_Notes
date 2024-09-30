@@ -154,6 +154,7 @@ import { useState } from "react";
 
 import React from "react";
 import { signIn } from "../services/userServices";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -307,7 +308,12 @@ const Login = () => {
               <a href="" className="forget-link">
                 Create account
               </a>
-              <button className="llogin-button" type="submit">
+              <button
+                className="llogin-button"
+                type="submit"
+                component={Link}
+                to={"/home"}
+              >
                 Login
               </button>
             </div>

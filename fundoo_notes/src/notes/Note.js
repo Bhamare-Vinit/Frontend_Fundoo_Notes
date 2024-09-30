@@ -14,8 +14,8 @@ import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import UndoOutlinedIcon from "@mui/icons-material/UndoOutlined";
 import RedoOutlinedIcon from "@mui/icons-material/RedoOutlined";
 import { createNote } from "../services/userServices";
-import { TextField, ClickAwayListener, Button } from "@mui/material";
-import { useState, useRef } from "react";
+import { TextField, ClickAwayListener, Button, Popover } from "@mui/material";
+import { useState, useRef, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { IconButton } from "@mui/material";
 import AddAlertOutlined from "@mui/icons-material/AddAlertOutlined";
@@ -27,6 +27,7 @@ const StyledCard = styled(Card)`
   display: flex;
   flex-direction: column;
   margin: auto;
+  // margin-bottom: 20px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   height: 115px;
@@ -60,11 +61,13 @@ const Container = styled(Box)`
       transform: 'translate(-50%, -50%)', 
 `;
 
-const Note = ({ noteData, layoutType,onNoteUpdate }) => {
+const Note = ({ noteData, layoutType, onNoteUpdate }) => {
+  const containerRef = useRef();
   const [isHovered, setIsHovered] = useState(false);
   // start
   const [openModal, setOpenModal] = useState(false);
 
+  const [colorPickerOpen, setColorPickerOpen] = useState(null);
   const [editedNoteData, setEditedNoteData] = useState({
     title: noteData.title,
     description: noteData.description,
@@ -74,6 +77,7 @@ const Note = ({ noteData, layoutType,onNoteUpdate }) => {
     reminder: noteData.reminder,
   });
 
+  //open modal and give initial values
   const handleOpenModal = () => {
     setEditedNoteData({
       title: noteData.title,
@@ -87,6 +91,7 @@ const Note = ({ noteData, layoutType,onNoteUpdate }) => {
   };
   // const handleCloseModal = () => setOpenModal(false);
 
+  //close modal
   const handleCloseModal = async () => {
     setOpenModal(false);
 
@@ -104,22 +109,102 @@ const Note = ({ noteData, layoutType,onNoteUpdate }) => {
     }
   };
 
+  //handle input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedNoteData((prev) => ({ ...prev, [name]: value }));
   };
+  //color logic
 
+  //
+  const handleColorClick = (event) => {
+    setColorPickerOpen(event.currentTarget);
+    console.log("I clicked on color handleColorClick run");
+  };
+
+  //close color picker in modal
+  const handleColorClose = () => {
+    setColorPickerOpen(null);
+  };
+
+  const handleColorSelect = async (color) => {
+    setEditedNoteData((prev) => ({ ...prev, color }));
+    setColorPickerOpen(null);
+
+    if (onNoteUpdate) {
+      onNoteUpdate(noteData.id, { ...editedNoteData, color });
+    }
+  };
+
+  // const handleColors = async (color) => {
+  //   setEditedNoteData((prev) => ({ ...prev, color }));
+  //   const updatedNoteData = { ...editedNoteData, color };
+
+  //   if (onNoteUpdate) {
+  //     onNoteUpdate(noteData.id, { ...editedNoteData, color });
+  //   }
+  //   console.log("is it working");
+  //   try {
+  //     await updateNote(noteData.id, editedNoteData); // Call the API to update the note with its ID
+  //     console.log("Note updated successfully");
+
+  //     // Optionally trigger a callback to update the note in the parent component
+  //     // if (onNoteUpdate) {
+  //     //   onNoteUpdate(noteData.id, editedNoteData);
+  //     // }
+  //   } catch (error) {
+  //     console.error("Failed to update note", error);
+  //   }
+
+  //   setColorPickerOpen(null);
+  // };
+  //start
+  const handleColors = (color) => {
+    // Update the state with the selected color
+    setEditedNoteData((prev) => ({ ...prev, color }));
+
+    // Close the color picker
+    setColorPickerOpen(null);
+  };
+
+  // Use useEffect to trigger the API call when the color changes
+  useEffect(() => {
+    if (editedNoteData.color) {
+      handleColorUpdates(); // Trigger the API call whenever color changes
+    }
+  }, [editedNoteData.color]);
+
+  // Function to handle the API call and update the database
+  const handleColorUpdates = async () => {
+    try {
+      // Call the API to update the note in the database
+      await updateNote(noteData.id, editedNoteData);
+      console.log("Note color updated successfully");
+
+      // Optionally, you can trigger the callback to update the parent component
+      if (onNoteUpdate) {
+        onNoteUpdate(noteData.id, editedNoteData);
+      }
+    } catch (error) {
+      console.error("Failed to update note color", error);
+    }
+  };
+
+  //end
+
+  const open = Boolean(colorPickerOpen);
+  const id = open ? "color-popover" : undefined;
   // console.log(noteData);
   return (
     <>
       <StyledCard
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={handleOpenModal}
+        // onClick={handleOpenModal}
         bgcolor={noteData.color}
         layoutType={layoutType}
       >
-        <CardContent>
+        <CardContent onClick={handleOpenModal}>
           <Typography>{noteData.title}</Typography>
           <Typography>{noteData.description}</Typography>
         </CardContent>
@@ -137,7 +222,7 @@ const Note = ({ noteData, layoutType,onNoteUpdate }) => {
             <IconButton size="small">
               <PersonAddAltOutlinedIcon fontSize="small" />
             </IconButton>
-            <IconButton size="small">
+            <IconButton size="small" onClick={handleColorClick}>
               <ColorLensOutlinedIcon fontSize="small" />
             </IconButton>
             <IconButton size="small">
@@ -155,7 +240,7 @@ const Note = ({ noteData, layoutType,onNoteUpdate }) => {
       </StyledCard>
       {/* // Model start */}
       <Modal open={openModal} onClose={handleCloseModal}>
-        <Container bgcolor={noteData.color}>
+        <Container ref={containerRef} bgcolor={noteData.color}>
           <TextField
             name="title"
             // placeholder="Title"
@@ -191,7 +276,7 @@ const Note = ({ noteData, layoutType,onNoteUpdate }) => {
               <IconButton>
                 <PersonAddAltOutlinedIcon />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={handleColorClick}>
                 {/* onClick={handleColorClick} */}
                 <ColorLensOutlinedIcon />
               </IconButton>
@@ -220,6 +305,52 @@ const Note = ({ noteData, layoutType,onNoteUpdate }) => {
           </Box>
         </Container>
       </Modal>
+      {/* Popover for color picker */}
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={colorPickerOpen}
+        onClose={handleColorClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+      >
+        <Box sx={{ display: "flex", p: 2 }}>
+          {[
+            "#f28b82",
+            "#fbbc04",
+            "#fff475",
+            "#ccff90",
+            "#a7ffeb",
+            "#cbf0f8",
+            "#aecbfa",
+            "#d7aefb",
+            "#fdcfe8",
+          ].map((color, index) => (
+            <IconButton
+              key={index}
+              onClick={() => {
+                if (openModal) {
+                  handleColorSelect(color); // If modal is open, call handleColorSelect
+                } else {
+                  handleColors(color); // Otherwise, call handleColors
+                }
+              }}
+            >
+              {/* onClick={() => handleColorSelect(color)} */}
+              <Box
+                sx={{
+                  backgroundColor: color,
+                  width: 24,
+                  height: 24,
+                  borderRadius: "50%",
+                }}
+              />
+            </IconButton>
+          ))}
+        </Box>
+      </Popover>
     </>
 
     // Model end

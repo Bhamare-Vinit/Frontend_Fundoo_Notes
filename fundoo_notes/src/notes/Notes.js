@@ -11,8 +11,12 @@ import {
 } from "../services/userServices";
 import { Card, CardActions, CardContent, Typography } from "@mui/material";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
+import AllNotes from "./AllNotes";
+import Trashed from "./Trashed";
+import Archived from "./Archived";
+import { Outlet } from "react-router-dom";
 
-const Notes = ({ selectedTab, layoutType }) => {
+const Notes = ({ selectedTab, layoutType, searchQuery }) => {
   const [noteData, setNoteData] = useState([
     {
       title: "",
@@ -25,37 +29,43 @@ const Notes = ({ selectedTab, layoutType }) => {
   ]);
   const [allNotes, setAllNotes] = useState([]);
 
-  useEffect(() => {
-    console.log("Fetching notes for tab:", selectedTab);
-    getAllNotes();
-  }, [selectedTab]);
-  const getAllNotes = async () => {
-    if (selectedTab === "Notes") {
-      const response = await getNote();
-      setAllNotes(response.data.data);
-    } else if (selectedTab === "Reminders") {
-      // const response = await getNote();
-      // // Filter notes where reminder is not empty (or not null) and is a valid date string
-      // const notesToSet = response.data.data.filter((note) => {
-      //   const reminderDate = note.reminder; // Assuming reminder can be a date or a string
-      //   return reminderDate && !isNaN(new Date(reminderDate)); // Check if it's a valid date
-      // });
-      // console.log("Filtered Reminders:", notesToSet); // Log filtered reminders for debugging
-      // setAllNotes(notesToSet);
-    } else if (selectedTab === "Edit Labels") {
-    } else if (selectedTab === "Archive") {
-      const response = await getArchivedNote();
-      console.log("Archieved Notes", response.data.data);
-      setAllNotes(response.data.data);
-    } else if (selectedTab === "Bin") {
-      const response = await getTrashNote();
-      console.log("Trashed Notes", response.data.data);
-      setAllNotes(response.data.data);
-    }
-
-    //No idea why i used below line
-    // setNoteData(response.data);
+  const handleNewNote = (newNote) => {
+    setAllNotes((prevNotes) => [newNote, ...prevNotes]);
   };
+  // useEffect(() => {
+  //   console.log("Fetching notes for tab:", selectedTab);
+  //   getAllNotes();
+  // }, [selectedTab]);
+  // const getAllNotes = async () => {
+  //   if (selectedTab === "Notes") {
+  //     const response = await getNote();
+  //     setAllNotes(response.data.data);
+  //   } else if (selectedTab === "Reminders") {
+  //     // const response = await getNote();
+  //     // // Filter notes where reminder is not empty (or not null) and is a valid date string
+  //     // const notesToSet = response.data.data.filter((note) => {
+  //     //   const reminderDate = note.reminder; // Assuming reminder can be a date or a string
+  //     //   return reminderDate && !isNaN(new Date(reminderDate)); // Check if it's a valid date
+  //     // });
+  //     // console.log("Filtered Reminders:", notesToSet); // Log filtered reminders for debugging
+  //     // setAllNotes(notesToSet);
+  //   } else if (selectedTab === "Edit Labels") {
+  //   } else if (selectedTab === "Archive") {
+  //     const response = await getArchivedNote();
+  //     console.log("Archieved Notes", response.data.data);
+  //     setAllNotes(response.data.data);
+  //   } else if (selectedTab === "Bin") {
+  //     const response = await getTrashNote();
+  //     console.log("Trashed Notes", response.data.data);
+  //     setAllNotes(response.data.data);
+  //   }
+
+  //   //No idea why i used below line
+  //   // setNoteData(response.data);
+  // };
+  // const filteredNotes = allNotes.filter((note) =>
+  //   note.title.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
   // / Function to handle note updates
   const handleNoteUpdate = (updatedNoteId, updatedNoteData) => {
     setAllNotes((prevNotes) =>
@@ -68,13 +78,59 @@ const Notes = ({ selectedTab, layoutType }) => {
   const DrawerHeader = styled("div")(({ theme }) => ({
     ...theme.mixins.toolbar,
   }));
+
+  // const renderNotes = () => {
+  //   switch (selectedTab) {
+  //     case "Notes":
+  //       return (
+  //         <AllNotes
+  //           layoutType={layoutType}
+  //           searchQuery={searchQuery}
+  //           handleNoteUpdate={handleNoteUpdate}
+  //         />
+  //       );
+  //     case "Archive":
+  //       return (
+  //         <Archived
+  //           layoutType={layoutType}
+  //           searchQuery={searchQuery}
+  //           handleNoteUpdate={handleNoteUpdate}
+  //         />
+  //       );
+  //     case "Bin":
+  //       return (
+  //         <Trashed
+  //           layoutType={layoutType}
+  //           searchQuery={searchQuery}
+  //           handleNoteUpdate={handleNoteUpdate}
+  //         />
+  //       );
+  //     default:
+  //       return (
+  //         <AllNotes
+  //           layoutType={layoutType}
+  //           searchQuery={searchQuery}
+  //           handleNoteUpdate={handleNoteUpdate}
+  //         />
+  //       );
+  //   }
+  // };
+
   return (
     <Box sx={{ display: "flex", width: "100%" }}>
       <Box component="main" sx={{ p: 3, width: "100%" }}>
         {/* can change */}
         <DrawerHeader />
-        <Form noteData={noteData} setNoteData={setNoteData} />
-        <Box
+        <Form
+          noteData={noteData}
+          setNoteData={setNoteData}
+          handleNewNote={handleNewNote}
+        />
+        <DrawerHeader />
+        <Outlet
+          context={{ layoutType, searchQuery, allNotes,setAllNotes, handleNoteUpdate }}
+        />
+        {/* <Box
           sx={{
             margin: "auto",
             // border: "1px solid black",
@@ -92,9 +148,9 @@ const Notes = ({ selectedTab, layoutType }) => {
             justifyContent="center"
             alignItems="center"
           >
-            {/* start */}
-            {allNotes.length > 0 ? (
-              allNotes.map((note, index) => (
+          
+            {filteredNotes.length > 0 ? (
+              filteredNotes.map((note, index) => (
                 <Grid
                   item
                   key={index}
@@ -114,9 +170,9 @@ const Notes = ({ selectedTab, layoutType }) => {
             ) : (
               <Typography>No notes to display</Typography>
             )}
-            {/* end */}
+            
           </Grid>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

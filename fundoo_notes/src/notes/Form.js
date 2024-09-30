@@ -33,7 +33,7 @@ const Container = styled(Box)`
     props.bgcolor || "white"}; // <-- Dynamic background color
 `;
 
-const Form = ({ noteData, setNoteData }) => {
+const Form = ({ noteData, setNoteData, handleNewNote }) => {
   const [showTextField, setShowTextField] = useState(false);
   const [colorPickerOpen, setColorPickerOpen] = useState(null); // For pop-up control
   const containerRef = useRef();
@@ -57,7 +57,16 @@ const Form = ({ noteData, setNoteData }) => {
 
       try {
         const response = await createNote(note);
-        console.log("Note created successfully:", response.data);
+        console.log(
+          "Note created successfully:____________________",
+          response.data
+        );
+        console.log(
+          "Note created successfully:++++++++++++++",
+          response.data.data
+        );
+
+        handleNewNote(response.data.data);
         // Clear inputs after successful creation
         setNoteData({ title: "", description: "", color: "" });
       } catch (error) {

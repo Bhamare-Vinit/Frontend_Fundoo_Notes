@@ -61,7 +61,13 @@ const Drawer = styled(MuiDrawer, {
   ],
 }));
 
-export default function MiniDrawer({ selectedTab, setSelectedTab,layoutType, setLayoutType  }) {
+export default function MiniDrawer({
+  selectedTab,
+  setSelectedTab,
+  layoutType,
+  setLayoutType,
+  setSearchQuery,
+}) {
   const [open, setOpen] = React.useState(false);
 
   const handleDrawer = () => {
@@ -70,7 +76,13 @@ export default function MiniDrawer({ selectedTab, setSelectedTab,layoutType, set
 
   return (
     <Box sx={{ display: "flex" }}>
-      <HeaderBar open={open} handleDrawer={handleDrawer} layoutType={layoutType} setLayoutType={setLayoutType}/>
+      <HeaderBar
+        open={open}
+        handleDrawer={handleDrawer}
+        layoutType={layoutType}
+        setLayoutType={setLayoutType}
+        setSearchQuery={setSearchQuery}
+      />
       <Drawer variant="permanent" open={open}>
         <DrawerHeader></DrawerHeader>
         <NavList

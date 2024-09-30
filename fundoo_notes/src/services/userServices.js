@@ -36,7 +36,7 @@ export const getNote = async (data) => {
 
   let response = await axios.get(noteUrl + "notes/", {
     headers: {
-      // "Content-Type": "application/json",
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
@@ -47,7 +47,7 @@ export const getNote = async (data) => {
 export const getArchivedNote = async (data) => {
   let response = await axios.get(noteUrl + "notes/archived_notes/", {
     headers: {
-      // "Content-Type": "application/json",
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });
@@ -58,7 +58,7 @@ export const getArchivedNote = async (data) => {
 export const getTrashNote = async (data) => {
   let response = await axios.get(noteUrl + "notes/trashed_notes/", {
     headers: {
-      // "Content-Type": "application/json",
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });

@@ -10,6 +10,7 @@ const Home = () => {
   const [selectedTab, setSelectedTab] = useState("Notes");
   const [layoutType, setLayoutType] = useState("grid");
   const [searchQuery, setSearchQuery] = useState("");
+  const [open, setOpen] = React.useState(false);
   console.log("Selected Tag is:", selectedTab);
 
   return (
@@ -21,11 +22,15 @@ const Home = () => {
         setLayoutType={setLayoutType}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        open={open}
+        setOpen={setOpen}
       />
       <Notes
         selectedTab={selectedTab}
         layoutType={layoutType}
         searchQuery={searchQuery}
+        open={open}
+        setOpen={setOpen}
       />
       {/* <Outlet /> */}
     </Box>

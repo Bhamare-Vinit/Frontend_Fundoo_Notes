@@ -67,8 +67,10 @@ export default function MiniDrawer({
   layoutType,
   setLayoutType,
   setSearchQuery,
+  open,
+  setOpen,
 }) {
-  const [open, setOpen] = React.useState(false);
+  // const [open, setOpen] = React.useState(false);
 
   const handleDrawer = () => {
     setOpen((preState) => !preState);

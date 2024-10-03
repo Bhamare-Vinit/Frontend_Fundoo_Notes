@@ -4,7 +4,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
 
 import {
   LightbulbOutlined as Lightbulb,
@@ -15,6 +16,7 @@ import {
 } from "@mui/icons-material";
 
 const NavList = ({ open, selectedTab, setSelectedTab }) => {
+  const location = useLocation();
   const navList = [
     { id: 1, name: "Notes", icon: <Lightbulb />, path: "/home" },
     { id: 2, name: "Reminders", icon: <Notification /> },
@@ -22,6 +24,14 @@ const NavList = ({ open, selectedTab, setSelectedTab }) => {
     { id: 4, name: "Archive", icon: <Archive />, path: "/home/archive" },
     { id: 5, name: "Bin", icon: <Trash />, path: "/home/trash" },
   ];
+
+  React.useEffect(() => {
+    // Update the selected tab based on the current route
+    const currentItem = navList.find((item) => item.path === location.pathname);
+    if (currentItem) {
+      setSelectedTab(currentItem.name); // Update selectedTab state
+    }
+  }, [location.pathname, navList, setSelectedTab]);
 
   return (
     <List>
@@ -50,7 +60,9 @@ const NavList = ({ open, selectedTab, setSelectedTab }) => {
                   },
 
               selectedTab === list.name && {
-                backgroundColor: "#f0f0f0",
+                // backgroundColor: "#f0f0f0",
+                backgroundColor: "#feefc3",
+
               },
             ]}
           >
@@ -67,6 +79,10 @@ const NavList = ({ open, selectedTab, setSelectedTab }) => {
                   : {
                       mr: "auto",
                     },
+                // selectedTab === list.name && {
+                //   // backgroundColor: "#f0f0f0",
+                //   backgroundColor: "#feefc3",
+                // },
               ]}
             >
               {list.icon}

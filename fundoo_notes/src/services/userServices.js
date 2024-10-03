@@ -125,4 +125,40 @@ export const toggleTrash = async (noteId) => {
   }
 };
 
-
+export const deleteNote = async (noteId) => {
+  const token = localStorage.getItem("access");
+  try {
+    let response = await axios.delete(
+      `${noteUrl}notes/${noteId}/`,
+      // {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("Note deleted successfully:", response);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+//const noteUrl = "http://127.0.0.1:8000/notes/";
+export const add_Collaborator = async (data) => {
+  const token = localStorage.getItem("access");
+  try {
+    let response = await axios.post(
+      `${noteUrl}collaborators/add-collaborators/`,
+      { data },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("Collaborator added:", response);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

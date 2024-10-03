@@ -10,21 +10,6 @@ import Notes from "../notes/Notes";
 import Archived from "../notes/Archived";
 import Trashed from "../notes/Trashed";
 import AllNotes from "../notes/AllNotes";
-// export default function Routers() {
-//   return (
-//     <>
-//       <BrowserRouter>
-//         <Routes>
-//           {/* <Route path="/register" element={<Register />}></Route>
-//         <Route path="/" element={<Login />}></Route> */}
-//           <Route path="/register" element={<Register />}></Route>
-//           <Route path="/" element={<Login />}></Route>
-//           <Route path="/home" element={<Home />}></Route>
-//         </Routes>
-//       </BrowserRouter>
-//     </>
-//   );
-// }
 
 const AppRoutes = createBrowserRouter([
   {

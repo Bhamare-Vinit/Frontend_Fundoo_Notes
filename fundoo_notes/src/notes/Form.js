@@ -21,14 +21,14 @@ const Container = styled(Box)`
   display: flex;
   flex-direction: column;
   margin: auto;
-
   box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
   border-color: #e0e0e0;
-  width: 600px;
+  // width: 600px;
+  width: 70%;
   border-radius: 8px;
   min-height: 30px;
   padding: 10px 15px;
-  //   border: 1px solid black;
+  border: 1px solid black;
   background-color: ${(props) =>
     props.bgcolor || "white"}; // <-- Dynamic background color
 `;
@@ -37,6 +37,8 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
   const [showTextField, setShowTextField] = useState(false);
   const [colorPickerOpen, setColorPickerOpen] = useState(null);
   const containerRef = useRef();
+  const [reminderAnchor, setReminderAnchor] = useState(null);
+  const [reminderTime, setReminderTime] = useState(""); // State to handle reminder time
 
   const onTextAreaClick = () => {
     setShowTextField(true);
@@ -47,12 +49,14 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
     const trimmedTitle = noteData.title;
     const trimmedDescription = noteData.description;
     const selectedColor = noteData.color;
+    const reminder = noteData.reminder;
 
     if (trimmedTitle && trimmedDescription) {
       const note = {
         title: trimmedTitle,
         description: trimmedDescription,
         color: selectedColor,
+        reminder: reminder,
       };
 
       try {
@@ -67,17 +71,29 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
         );
 
         handleNewNote(response.data.data);
-        setNoteData({ title: "", description: "", color: "" });
+        setNoteData({ title: "", description: "", color: "", reminder: "" });
       } catch (error) {
         console.error("Error creating note:", error);
-        setNoteData({ title: "", description: "", color: "" });
+        setNoteData({ title: "", description: "", color: "", reminder: "" });
       }
     } else {
       console.log("Please fill in both fields before submitting.");
-      setNoteData({ title: "", description: "", color: "" });
+      setNoteData({ title: "", description: "", color: "", reminder: "" });
     }
     setShowTextField(false);
     containerRef.current.style.minHeight = "30px";
+  };
+  const handleReminderClick = (event) => {
+    setReminderAnchor(event.currentTarget);
+  };
+
+  const handleReminderClose = () => {
+    setReminderAnchor(null);
+  };
+
+  const handleReminderSave = () => {
+    setNoteData((prev) => ({ ...prev, reminder: reminderTime }));
+    setReminderAnchor(null);
   };
 
   const handleClickAway = () => {
@@ -102,6 +118,9 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
     setColorPickerOpen(null);
   };
 
+  const openReminder = Boolean(reminderAnchor);
+  const reminderId = openReminder ? "reminder-popover" : undefined;
+
   const open = Boolean(colorPickerOpen);
   const id = open ? "color-popover" : undefined;
 
@@ -117,7 +136,7 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
             variant="standard"
             InputProps={{ disableUnderline: true }}
             style={{ marginBottom: "10px" }}
-            value={noteData.title} 
+            value={noteData.title}
             onChange={handleChange}
           />
         )}
@@ -129,7 +148,7 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
           variant="standard"
           InputProps={{ disableUnderline: true }}
           onClick={onTextAreaClick}
-          value={noteData.description} 
+          value={noteData.description}
           onChange={handleChange}
         />
         {showTextField && (
@@ -137,36 +156,118 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
             style={{
               display: "flex",
               justifyContent: "space-between",
-              marginTop: "10px",
+              marginTop: "1%",
+              border: "1px solid black",
+              // flexWrap: "wrap",
             }}
           >
-            <Box style={{ display: "flex", gap: "5%" }}>
-              <IconButton>
-                <AddAlertOutlined />
+            <Box
+              style={{
+                display: "flex",
+                gap: { xs: "1%", sm: "5%", md: "5%", lg: "8%", xl: "8%" },
+              }}
+            >
+              <IconButton
+                onClick={handleReminderClick}
+                sx={{
+                  padding: {
+                    xs: "3px",
+                    sm: "5px",
+                    md: "8px",
+                    lg: "8px",
+                    xl: "8px",
+                  },
+                }}
+              >
+                <AddAlertOutlined
+                  sx={{
+                    fontSize: { xs: "20px", sm: "24px", md: "26px" },
+                  }}
+                />
               </IconButton>
-              <IconButton>
-                <PersonAddAltOutlinedIcon />
+              <IconButton
+                sx={{
+                  padding: {
+                    xs: "3px",
+                    sm: "5px",
+                    md: "8px",
+                    lg: "8px",
+                    xl: "8px",
+                  },
+                }}
+              >
+                <PersonAddAltOutlinedIcon
+                  sx={{
+                    fontSize: { xs: "20px", sm: "24px", md: "26px" },
+                  }}
+                />
               </IconButton>
-              <IconButton onClick={handleColorClick}>
-                <ColorLensOutlinedIcon />
+              <IconButton
+                onClick={handleColorClick}
+                sx={{
+                  padding: {
+                    xs: "3px",
+                    sm: "5px",
+                    md: "8px",
+                    lg: "8px",
+                    xl: "8px",
+                  },
+                }}
+              >
+                <ColorLensOutlinedIcon
+                  sx={{
+                    fontSize: { xs: "20px", sm: "24px", md: "26px" },
+                  }}
+                />
               </IconButton>
-              <IconButton>
-                <InsertPhotoOutlinedIcon />
+              <IconButton
+                sx={{
+                  padding: {
+                    xs: "3px",
+                    sm: "5px",
+                    md: "8px",
+                    lg: "8px",
+                    xl: "8px",
+                  },
+                }}
+              >
+                <InsertPhotoOutlinedIcon
+                  sx={{
+                    fontSize: { xs: "20px", sm: "24px", md: "26px" },
+                  }}
+                />
               </IconButton>
-              <IconButton>
-                <ArchiveOutlinedIcon />
+              <IconButton
+                sx={{
+                  padding: {
+                    xs: "3px",
+                    sm: "5px",
+                    md: "8px",
+                    lg: "8px",
+                    xl: "8px",
+                  },
+                }}
+              >
+                <ArchiveOutlinedIcon
+                  sx={{
+                    fontSize: { xs: "20px", sm: "24px", md: "26px" },
+                  }}
+                />
               </IconButton>
-              <IconButton>
+              {/* <IconButton>
                 <UndoOutlinedIcon />
               </IconButton>
               <IconButton>
                 <RedoOutlinedIcon />
-              </IconButton>
+              </IconButton> */}
             </Box>
             <Box>
               <Button
                 variant="text"
-                sx={{ fontWeight: "bold" }}
+                style={{
+                  fontWeight: "bold",
+                  fontSize: { xs: "20px", sm: "24px", md: "26px" },
+                }}
                 onClick={handleInput}
               >
                 Close
@@ -209,6 +310,30 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
                 />
               </IconButton>
             ))}
+          </Box>
+        </Popover>
+
+        <Popover
+          id={reminderId}
+          open={openReminder}
+          anchorEl={reminderAnchor}
+          onClose={handleReminderClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          <Box sx={{ p: 2 }}>
+            <TextField
+              label="Set Reminder"
+              type="datetime-local"
+              value={reminderTime}
+              onChange={(e) => setReminderTime(e.target.value)}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <Button onClick={handleReminderSave}>Save</Button>
           </Box>
         </Popover>
 

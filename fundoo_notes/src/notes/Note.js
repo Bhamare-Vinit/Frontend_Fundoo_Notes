@@ -4,6 +4,7 @@ import {
   CardContent,
   Typography,
   Modal,
+  Select,
 } from "@mui/material";
 import React from "react";
 import { styled, useTheme } from "@mui/material/styles";
@@ -26,6 +27,8 @@ import {
   updateNote,
   toggleArchive,
   toggleTrash,
+  deleteNote,
+  add_Collaborator,
 } from "../services/userServices";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -44,9 +47,11 @@ const StyledCard = styled(Card)`
   background-color: ${(props) => props.bgcolor || "white"};
   width: ${(props) =>
     props.layoutType === "list"
-      ? "800px"
+      ? `70%`
       : "240px"}; // Adjust width based on layoutType
 `;
+
+// "800px"
 
 const Container = styled(Box)`
 
@@ -75,6 +80,7 @@ const Note = ({
   layoutType,
   onNoteUpdate,
   handleNoteRemove,
+ 
 }) => {
   console.log("TTTTTTTAg:", selectedTab);
   const containerRef = useRef();
@@ -90,9 +96,77 @@ const Note = ({
     is_trash: noteData.is_trash,
     reminder: noteData.reminder,
   });
-  // start
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openMenu = Boolean(anchorEl);
+  // start reminder logic
+  const [reminderAnchorEl, setReminderAnchorEl] = useState(null); // For Popover
+  const [reminderTime, setReminderTime] = useState(new Date().toISOString()); // Reminder Time
+
+  // Function to open the Reminder Popover
+  const handleReminderClick = (event) => {
+    setReminderAnchorEl(event.currentTarget);
+  };
+
+  // Function to close the Reminder Popover
+  const handleReminderClose = () => {
+    setReminderAnchorEl(null);
+  };
+
+  // When clicking Save in the Reminder Popover
+  const handleSaveReminder = async () => {
+    setReminderAnchorEl(null); // Close the Popover
+    const updatedNote = { ...editedNoteData, reminder: reminderTime }; // Add reminder time to note data
+    setEditedNoteData(updatedNote);
+
+    try {
+      await updateNote(noteData.id, updatedNote); // Call the API to update the note
+      if (onNoteUpdate) onNoteUpdate(noteData.id, updatedNote);
+      console.log("Reminder set successfully!");
+    } catch (error) {
+      console.error("Failed to set reminder", error);
+    }
+  };
+
+  // Handle reminder time change
+  const handleReminderTimeChange = (e) => {
+    setReminderTime(e.target.value);
+  };
+  //end reminder logic
+
+  //start Collaborator logic
+  const [collaboratorId, setCollaboratorId] = useState("");
+  const [accessType, setAccessType] = useState("read_only");
+  const [collaboratorPopoverAnchorEl, setCollaboratorPopoverAnchorEl] =
+    useState(null);
+
+  const handleCollaboratorClick = (event) => {
+    setCollaboratorPopoverAnchorEl(event.currentTarget);
+  };
+
+  const handleCollaboratorClose = () => {
+    setCollaboratorPopoverAnchorEl(null);
+  };
+
+  const handleAddCollaborator = async () => {
+    const data = {
+      note_id: parseInt(noteData.id),
+      user_ids: [collaboratorId],
+      access_type: accessType,
+    };
+    console.log(typeof data.note_id);
+    console.log(typeof data.collaboratorId);
+
+    try {
+      const response = await add_Collaborator(data);
+      console.log("Collaborator added:", response);
+    } catch (error) {
+      console.error("Failed to add collaborator", error);
+    } finally {
+      handleCollaboratorClose();
+    }
+  };
+
+  //end collaborator logic
   const handleClickMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -116,6 +190,32 @@ const Note = ({
       console.log("Note Trash status toggled");
     } catch (error) {
       console.error("Failed to toggle Trash status", error);
+    }
+  };
+
+  //permenent Delete
+  // const permenentDelete = async () => {
+  //   setOpenModal(false);
+  //   try {
+  //     await deleteNote(noteData.id);
+  //     if (handleNoteRemove) {
+  //       handleNoteRemove(noteData.id); // Pass the ID of the note to be removed
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to toggle Trash status", error);
+  //   }
+  // };
+
+  const handlePermanentDelete = async () => {
+    setOpenModal(false); // Close modal if open
+    try {
+      await deleteNote(noteData.id); // Call API to permanently delete the note
+      if (handleNoteRemove) {
+        handleNoteRemove(noteData.id); // Remove the note from the UI
+      }
+      console.log("Note permanently deleted");
+    } catch (error) {
+      console.error("Failed to permanently delete note", error);
     }
   };
 
@@ -294,23 +394,20 @@ const Note = ({
                   gap: "50%",
                 }}
               >
-                <IconButton size="small">
+                <IconButton size="small" onClick={handlePermanentDelete}>
                   <DeleteForever fontSize="small" />
                 </IconButton>
-                <IconButton size="small">
-                  <RestoreFromTrash
-                    fontSize="small"
-                    onClick={handleDeleteNote}
-                  />
+                <IconButton size="small" onClick={handleDeleteNote}>
+                  <RestoreFromTrash fontSize="small" />
                 </IconButton>
               </Box>
             ) : (
               // If selectedTag is not defined, show all IconButtons
               <>
-                <IconButton size="small">
+                <IconButton size="small" onClick={handleReminderClick}>
                   <AddAlertOutlined fontSize="small" />
                 </IconButton>
-                <IconButton size="small">
+                <IconButton size="small" onClick={handleCollaboratorClick}>
                   <PersonAddAltOutlinedIcon fontSize="small" />
                 </IconButton>
                 <IconButton size="small" onClick={handleColorClick}>
@@ -353,6 +450,73 @@ const Note = ({
           <MenuItem onClick={handleDeleteNote}>Delete note</MenuItem>
           <MenuItem onClick={handleCloseMenu}>Add Labels</MenuItem>
         </Menu>
+        {/* start reminder popover*/}
+        <Popover
+          open={Boolean(reminderAnchorEl)}
+          anchorEl={reminderAnchorEl}
+          onClose={handleReminderClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          <Box sx={{ p: 2 }}>
+            <Typography variant="h6">Set Reminder</Typography>
+            <TextField
+              type="datetime-local"
+              value={reminderTime}
+              onChange={handleReminderTimeChange}
+              fullWidth
+            />
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+              <Button onClick={handleReminderClose}>Cancel</Button>
+              <Button onClick={handleSaveReminder} variant="contained">
+                Save
+              </Button>
+            </Box>
+          </Box>
+        </Popover>
+        <Popover
+          open={Boolean(collaboratorPopoverAnchorEl)}
+          anchorEl={collaboratorPopoverAnchorEl}
+          onClose={handleCollaboratorClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+        >
+          <Box p={2}>
+            <Typography>Add Collaborator</Typography>
+            <TextField
+              label="User ID"
+              variant="outlined"
+              fullWidth
+              value={collaboratorId}
+              onChange={(e) => setCollaboratorId(e.target.value)}
+              margin="dense"
+            />
+            <Select
+              value={accessType}
+              onChange={(e) => setAccessType(e.target.value)}
+              fullWidth
+              margin="dense"
+            >
+              <MenuItem value="read_only">Read Only</MenuItem>
+              <MenuItem value="read_write">Read & Write</MenuItem>
+            </Select>
+            <Button
+              onClick={handleAddCollaborator}
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              Save
+            </Button>
+          </Box>
+        </Popover>
+
+        {/* end  */}
       </StyledCard>
       {/* // Model start */}
       <Modal open={openModal} onClose={handleCloseModal}>
@@ -385,6 +549,58 @@ const Note = ({
               marginTop: "10px",
             }}
           >
+            {selectedTab ? (
+              // If selectedTag is defined, show only the first two IconButtons
+              <Box
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  gap: "50%",
+                }}
+              >
+                <IconButton size="small" onClick={handlePermanentDelete}>
+                  <DeleteForever
+                    fontSize="small"
+                    // ocClick={() => {
+                    //   permenentDelete;
+                    // }}
+                  />
+                </IconButton>
+                <IconButton size="small" onClick={handleDeleteNote}>
+                  <RestoreFromTrash fontSize="small" />
+                </IconButton>
+              </Box>
+            ) : (
+              // If selectedTag is not defined, show all IconButtons
+              <Box style={{ display: "flex", gap: "5%" }}>
+                <IconButton size="small" onClick={handleReminderClick}>
+                  <AddAlertOutlined fontSize="small" />
+                </IconButton>
+                <IconButton size="small">
+                  <PersonAddAltOutlinedIcon fontSize="small" />
+                </IconButton>
+                <IconButton size="small" onClick={handleColorClick}>
+                  <ColorLensOutlinedIcon fontSize="small" />
+                </IconButton>
+                <IconButton size="small">
+                  <InsertPhotoOutlinedIcon fontSize="small" />
+                </IconButton>
+                <IconButton size="small" onClick={handleArchiveToggle}>
+                  <ArchiveOutlinedIcon fontSize="small" />
+                </IconButton>
+                <IconButton
+                  size="small"
+                  aria-controls={open ? "demo-positioned-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={handleClickMenu}
+                >
+                  <MoreVertOutlinedIcon fontSize="small" />
+                </IconButton>
+              </Box>
+            )}
+
+            {/* 
             <Box style={{ display: "flex", gap: "5%" }}>
               <IconButton>
                 <AddAlertOutlined />
@@ -393,7 +609,6 @@ const Note = ({
                 <PersonAddAltOutlinedIcon />
               </IconButton>
               <IconButton onClick={handleColorClick}>
-                {/* onClick={handleColorClick} */}
                 <ColorLensOutlinedIcon />
               </IconButton>
               <IconButton>
@@ -412,6 +627,8 @@ const Note = ({
                 <MoreVertOutlinedIcon fontSize="small" />
               </IconButton>
             </Box>
+             */}
+
             <Box>
               <Button
                 variant="text"

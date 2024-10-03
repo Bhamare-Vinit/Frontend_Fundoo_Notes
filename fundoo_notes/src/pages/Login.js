@@ -180,6 +180,7 @@ const Login = () => {
       console.log("Initail data: ", values);
       try {
         let response = await signIn(values);
+        localStorage.setItem("access", response.data.data.access);
 
         console.log("login success", "++++++++++");
         // console.log("response:", response);
@@ -188,7 +189,7 @@ const Login = () => {
 
         // // console.log(response.data);
         // console.log("access2:", JSON.stringify(response.data.access));
-        localStorage.setItem("access", response.data.data.access);
+        // localStorage.setItem("access", response.data.data.access);
 
         console.log(showSuccessAlert);
         if (response) {
@@ -197,9 +198,9 @@ const Login = () => {
         setTimeout(() => {
           setShowSuccessAlert(false);
           navigate("/home");
-        }, 3000);
+        }, 2000);
 
-        navigate("/home");
+        // navigate("/home");
         console.log("access Token", response.data.data.access);
       } catch (err) {
         //just try

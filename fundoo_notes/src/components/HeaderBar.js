@@ -14,6 +14,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import SearchIcon from "@mui/icons-material/Search";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import Refresh from "@mui/icons-material/Refresh";
 
 const Header = styled(AppBar)`
   z-index: 1201;
@@ -63,20 +66,25 @@ const HeaderBar = ({
         </Box>
         <Box>
           {/* <TextField
-        id="input-with-icon-textfield"
-        label="TextField"
-        slotProps={{
-          input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <AccountCircle />
-              </InputAdornment>
-            ),
-          },
-        }}
-        variant="standard"
-      /> */}
-          <TextField
+            id="input-with-icon-textfield"
+            label="TextField"
+            
+            InputProps={{ disableUnderline: true }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              },
+            }}
+            variant="filled"
+            value={searchQuery}
+            onChange={handleSearchChange}
+
+          /> */}
+          {/* <TextField
             id="filled-search"
             label="Search field"
             type="search"
@@ -84,11 +92,49 @@ const HeaderBar = ({
             value={searchQuery}
             onChange={handleSearchChange}
             InputProps={{ disableUnderline: true }}
+          /> */}
+          <TextField
+            variant="outlined"
+            placeholder="Search"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              height: "50px", // Adjust height
+              width: "600px", // Adjust width
+              backgroundColor: "#f5f5f5", // Light grey background
+              borderRadius: "8px", // Rounded corners
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  border: "none", // Remove default border
+                },
+              },
+            }}
           />
         </Box>
         <Box>
           <IconButton onClick={toggleLayout}>
+            {layoutType === "grid" ? (
+              <ViewListIcon fontSize="large" />
+            ) : (
+              <ViewModuleIcon fontSize="large" />
+            )}
+          </IconButton>
+          <IconButton>
+            <Refresh fontSize="large" />
+          </IconButton>
+        </Box>
+
+        <Box>
+          {/* <IconButton fontSize="large" onClick={toggleLayout}>
             {layoutType === "grid" ? <ViewListIcon /> : <ViewModuleIcon />}
+          </IconButton> */}
+          <IconButton>
+            <AccountCircle fontSize="large" />
           </IconButton>
         </Box>
       </Toolbar>

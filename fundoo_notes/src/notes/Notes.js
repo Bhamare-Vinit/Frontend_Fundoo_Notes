@@ -16,7 +16,7 @@ import Trashed from "./Trashed";
 import Archived from "./Archived";
 import { Outlet } from "react-router-dom";
 
-const Notes = ({ selectedTab, layoutType, searchQuery }) => {
+const Notes = ({ selectedTab, layoutType, searchQuery, open, setOpen }) => {
   const [noteData, setNoteData] = useState([
     {
       title: "",
@@ -139,6 +139,8 @@ const Notes = ({ selectedTab, layoutType, searchQuery }) => {
             setAllNotes,
             handleNoteUpdate,
             handleNoteRemove,
+            open,
+            setOpen,
           }}
         />
         {/* <Box

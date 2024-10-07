@@ -7,32 +7,31 @@ import Box from "@mui/material/Box";
 import { Outlet } from "react-router-dom";
 
 const Home = () => {
-  const [selectedTab, setSelectedTab] = useState("Notes");
-  const [layoutType, setLayoutType] = useState("grid");
-  const [searchQuery, setSearchQuery] = useState("");
+  // const [selectedTab, setSelectedTab] = useState("Notes");
+  // const [layoutType, setLayoutType] = useState("grid");
+  // const [searchQuery, setSearchQuery] = useState("");
   const [open, setOpen] = React.useState(false);
-  console.log("Selected Tag is:", selectedTab);
+  // console.log("Selected Tag is:", selectedTab);
 
   return (
     <Box style={{ display: "flex", width: "100%" }}>
       <SwipeDrawer
-        selectedTab={selectedTab}
-        setSelectedTab={setSelectedTab}
-        layoutType={layoutType}
-        setLayoutType={setLayoutType}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
+        // selectedTab={selectedTab}
+        // setSelectedTab={setSelectedTab}
+        // layoutType={layoutType}
+        // setLayoutType={setLayoutType}
+        // searchQuery={searchQuery}
+        // setSearchQuery={setSearchQuery}
         open={open}
         setOpen={setOpen}
       />
       <Notes
-        selectedTab={selectedTab}
-        layoutType={layoutType}
-        searchQuery={searchQuery}
+        // selectedTab={selectedTab}
+        // layoutType={layoutType}
+        // searchQuery={searchQuery}
         open={open}
         setOpen={setOpen}
       />
-      {/* <Outlet /> */}
     </Box>
   );
 };

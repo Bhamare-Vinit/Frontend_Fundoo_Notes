@@ -1,5 +1,11 @@
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
+import { useSelector, useDispatch } from "react-redux"; // Import hooks from React-Redux
+import {
+  setSelectedTab,
+  setLayoutType,
+  setSearchQuery,
+} from "../redux/homeSlice"; // Import actions
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -62,14 +68,18 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer({
-  selectedTab,
-  setSelectedTab,
-  layoutType,
-  setLayoutType,
-  setSearchQuery,
+  // selectedTab,
+  // setSelectedTab,
+  // layoutType,
+  // setLayoutType,
+  // setSearchQuery,
   open,
   setOpen,
 }) {
+  
+  const selectedTab = useSelector((state) => state.home.selectedTab); // Get selectedTab from Redux store
+  const layoutType = useSelector((state) => state.home.layoutType); // Get layoutType from Redux store
+  const searchQuery = useSelector((state) => state.home.searchQuery);
   // const [open, setOpen] = React.useState(false);
 
   const handleDrawer = () => {
@@ -81,16 +91,19 @@ export default function MiniDrawer({
       <HeaderBar
         open={open}
         handleDrawer={handleDrawer}
-        layoutType={layoutType}
-        setLayoutType={setLayoutType}
-        setSearchQuery={setSearchQuery}
+        // layoutType={layoutType}
+        // // setLayoutType={setLayoutType}
+        // setLayoutType={(type) => dispatch(setLayoutType(type))}
+        // // setSearchQuery={setSearchQuery}
+        // setSearchQuery={(query) => dispatch(setSearchQuery(query))}
       />
       <Drawer variant="permanent" open={open}>
         <DrawerHeader></DrawerHeader>
         <NavList
           open={open}
-          selectedTab={selectedTab}
-          setSelectedTab={setSelectedTab}
+          // selectedTab={selectedTab}
+          // // setSelectedTab={setSelectedTab}
+          // setSelectedTab={(tab) => dispatch(setSelectedTab(tab))}
         />
 
         {/* <Divider /> */}

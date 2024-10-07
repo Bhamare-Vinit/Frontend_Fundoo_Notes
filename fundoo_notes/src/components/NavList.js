@@ -6,7 +6,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useLocation, Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-
+import { useDispatch, useSelector } from "react-redux"; // Redux hooks
+import { setSelectedTab } from "../redux/homeSlice";
 import {
   LightbulbOutlined as Lightbulb,
   NotificationsOutlined as Notification,
@@ -15,8 +16,10 @@ import {
   DeleteOutlineOutlined as Trash,
 } from "@mui/icons-material";
 
-const NavList = ({ open, selectedTab, setSelectedTab }) => {
+const NavList = ({ open }) => {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const selectedTab = useSelector((state) => state.home.selectedTab);
   const navList = [
     { id: 1, name: "Notes", icon: <Lightbulb />, path: "/home" },
     { id: 2, name: "Reminders", icon: <Notification /> },
@@ -26,12 +29,14 @@ const NavList = ({ open, selectedTab, setSelectedTab }) => {
   ];
 
   React.useEffect(() => {
-    // Update the selected tab based on the current route
+    //tab change
     const currentItem = navList.find((item) => item.path === location.pathname);
     if (currentItem) {
-      setSelectedTab(currentItem.name); // Update selectedTab state
+      // setSelectedTab(currentItem.name);
+      dispatch(setSelectedTab(currentItem.name));
     }
-  }, [location.pathname, navList, setSelectedTab]);
+  }, [location.pathname, navList, dispatch]);
+  // }, [location.pathname, navList, setSelectedTab]);
 
   return (
     <List>
@@ -45,7 +50,8 @@ const NavList = ({ open, selectedTab, setSelectedTab }) => {
           <ListItemButton
             component={Link}
             to={list.path}
-            onClick={() => setSelectedTab(list.name)}
+            // onClick={() => setSelectedTab(list.name)}
+            onClick={() => dispatch(setSelectedTab(list.name))}
             sx={[
               {
                 minHeight: 48,
@@ -62,7 +68,6 @@ const NavList = ({ open, selectedTab, setSelectedTab }) => {
               selectedTab === list.name && {
                 // backgroundColor: "#f0f0f0",
                 backgroundColor: "#feefc3",
-
               },
             ]}
           >

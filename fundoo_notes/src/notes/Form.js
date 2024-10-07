@@ -38,7 +38,7 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
   const [colorPickerOpen, setColorPickerOpen] = useState(null);
   const containerRef = useRef();
   const [reminderAnchor, setReminderAnchor] = useState(null);
-  const [reminderTime, setReminderTime] = useState(""); // State to handle reminder time
+  const [reminderTime, setReminderTime] = useState(""); //handle reminder time
 
   const onTextAreaClick = () => {
     setShowTextField(true);
@@ -157,7 +157,7 @@ const Form = ({ noteData, setNoteData, handleNewNote }) => {
               display: "flex",
               justifyContent: "space-between",
               marginTop: "1%",
-              border: "1px solid black",
+              // border: "1px solid black",
               // flexWrap: "wrap",
             }}
           >

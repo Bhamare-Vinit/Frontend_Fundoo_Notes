@@ -17,6 +17,14 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Refresh from "@mui/icons-material/Refresh";
+import { useSelector, useDispatch } from "react-redux"; // Import hooks from React-Redux
+import {
+  setSelectedTab,
+  setLayoutType,
+  layoutType,
+  setSearchQuery,
+  searchQuery,
+} from "../redux/homeSlice"; // Import actions
 
 const Header = styled(AppBar)`
   z-index: 1201;
@@ -33,17 +41,38 @@ const Heading = styled(Typography)`
 const HeaderBar = ({
   open,
   handleDrawer,
-  layoutType,
-  setLayoutType,
-  searchQuery,
-  setSearchQuery,
+  // layoutType,
+  // setLayoutType,
+  // searchQuery,
+  // setSearchQuery,
 }) => {
-  const toggleLayout = () => {
-    setLayoutType((prevType) => (prevType === "grid" ? "list" : "grid"));
+  const dispatch = useDispatch();
+  const layoutType = useSelector((state) => state.home.layoutType);
+  const searchQuery = useSelector((state) => state.home.searchQuery);
+
+  // const toggleLayout = () => {
+  //   dispatch(
+  //     setLayoutType((prevType) => (prevType === "grid" ? "list" : "grid")),
+  //     console.log("layoutType", layoutType)
+  //   );
+  //   // setLayoutType((prevType) => (prevType === "grid" ? "list" : "grid"));
+  // };
+
+  const currentLayoutType = useSelector((state) => state.home.layoutType);
+  const toggleLayout = (currentLayout) => {
+    return currentLayout === "grid" ? "list" : "grid";
+  };
+
+  // In your component
+  const handleToggleLayout = () => {
+    const newLayoutType = toggleLayout(currentLayoutType);
+    dispatch(setLayoutType(newLayoutType)); // Only dispatch the new layout type, not a function
   };
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    dispatch(setSearchQuery(e.target.value));
+    console.log("Querr", searchQuery);
+    // setSearchQuery(e.target.value);
   };
 
   const logo =
@@ -62,40 +91,13 @@ const HeaderBar = ({
             <Menu />
           </IconButton>
           <img src={logo} alt="logo" style={{ width: 30 }} />
-          <Heading>Keep</Heading>
+          <Heading sx={{ display: { xs: "none", sm: "block" } }}>Keep</Heading>
         </Box>
         <Box>
-          {/* <TextField
-            id="input-with-icon-textfield"
-            label="TextField"
-            
-            InputProps={{ disableUnderline: true }}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AccountCircle />
-                  </InputAdornment>
-                ),
-              },
-            }}
-            variant="filled"
-            value={searchQuery}
-            onChange={handleSearchChange}
-
-          /> */}
-          {/* <TextField
-            id="filled-search"
-            label="Search field"
-            type="search"
-            variant="filled"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            InputProps={{ disableUnderline: true }}
-          /> */}
           <TextField
             variant="outlined"
             placeholder="Search"
+            onChange={handleSearchChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -104,20 +106,26 @@ const HeaderBar = ({
               ),
             }}
             sx={{
-              height: "50px", // Adjust height
-              width: "600px", // Adjust width
-              backgroundColor: "#f5f5f5", // Light grey background
-              borderRadius: "8px", // Rounded corners
+              height: "50px",
+              width: {
+                xs: "150px",
+                sm: "250px",
+                md: "450px",
+                lg: "600px",
+                xl: "600px",
+              },
+              backgroundColor: "#f5f5f5",
+              borderRadius: "8px",
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  border: "none", // Remove default border
+                  border: "none",
                 },
               },
             }}
           />
         </Box>
-        <Box>
-          <IconButton onClick={toggleLayout}>
+        <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center" }}>
+          <IconButton onClick={handleToggleLayout}>
             {layoutType === "grid" ? (
               <ViewListIcon fontSize="large" />
             ) : (
@@ -130,9 +138,6 @@ const HeaderBar = ({
         </Box>
 
         <Box>
-          {/* <IconButton fontSize="large" onClick={toggleLayout}>
-            {layoutType === "grid" ? <ViewListIcon /> : <ViewModuleIcon />}
-          </IconButton> */}
           <IconButton>
             <AccountCircle fontSize="large" />
           </IconButton>
